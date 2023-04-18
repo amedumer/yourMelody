@@ -23,6 +23,14 @@ class MyDocument extends Document {
             name="twitter:description"
             content="Get song recommendations based on your mood."
           />
+          <meta
+            property="og:image"
+            content="/og.png"
+          />
+          <meta
+            name="twitter:image"
+            content="/og.png"
+          />
           
         </Head>
         <body>
