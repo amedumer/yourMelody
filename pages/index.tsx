@@ -13,6 +13,7 @@ import Turnstile from "react-turnstile";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const [token, setToken] = useState("");
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Happy");
@@ -75,6 +76,7 @@ const Home: NextPage = () => {
       setGeneratedBios((prev) => prev + chunkValue);
     }
     scrollToBios();
+    setIsDone(true);
     setLoading(false);
   };
 
@@ -144,12 +146,21 @@ const Home: NextPage = () => {
             />
           </div>
           
-          {!loading && (
+          {!loading && !isDone && (
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-5 mt-4 hover:bg-black/80 w-full"
               onClick={(e) => generateBio(e)}
             >
               Find your melody &rarr;
+            </button>
+          )}
+
+          {!loading && isDone && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-5 mt-4 hover:bg-black/80 w-full"
+              onClick={(e) => {window.location.reload();}}
+            >
+              Find another melody &rarr;
             </button>
           )}
           {loading && (
@@ -160,6 +171,10 @@ const Home: NextPage = () => {
               <LoadingDots color="white" style="large" />
             </button>
           )}
+
+          
+
+
         </div>
         <Toaster
           position="top-center"
@@ -180,7 +195,7 @@ const Home: NextPage = () => {
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 {generatedBios
-                  .substring(generatedBios.indexOf("*") + 2)
+                  .substring(generatedBios.indexOf("*") + 1)
                   .split("*")
                   .map((generatedBio) => {
                     return (
