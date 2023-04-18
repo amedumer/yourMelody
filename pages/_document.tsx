@@ -11,7 +11,7 @@ class MyDocument extends Document {
             name="description"
             content="Get song recommendations based on your mood."
           />
-          <meta property="og:site_name" content="twitterbio.com" />
+          <meta property="og:site_name" content="melodi.space" />
           <meta
             property="og:description"
             content="Get song recommendations based on your mood."
