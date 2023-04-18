@@ -4,6 +4,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta

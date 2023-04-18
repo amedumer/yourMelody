@@ -8,11 +8,14 @@ import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
+import Turnstile from "react-turnstile";
+
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
   const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Professional");
+  const [vibe, setVibe] = useState<VibeType>("Happy");
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
   const bioRef = useRef<null | HTMLDivElement>(null);
@@ -23,29 +26,34 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === "Funny"
-      ? "Make sure there is a joke in there and it's a little ridiculous."
-      : null
-  }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
-  }`;
+
+  const prompt = `You are an AI-powered music recommender to analyze moods and suggest 3 personalized songs which does exist in real life for enhanced listening experiences. You give short answers.Each suggestion is in the form "(Band) - (Song Name)". Each suggestion starts with a *. User is feeling like :"${bio}" and the vibe is:"${vibe}"`;
 
   const generateBio = async (e: any) => {
+    if (bio.length === 0) {
+      toast.error("Please enter a bio");
+      return;
+    }
+
+    if(bio.length > 100) {
+      setBio(bio.slice(0, 100));
+    }
+    
+
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
+
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-turnstile-token": token,
       },
       body: JSON.stringify({
         prompt,
       }),
     });
-
     if (!response.ok) {
       throw new Error(response.statusText);
     }
@@ -73,25 +81,18 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>yourMelody</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/Nutlope/twitterbio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
+        
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using chatGPT
+          Your Mood, Your Melody
         </h1>
-        <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
+        <p className="text-slate-500 mt-5">AI Suggested melodies</p>
+        <p className="text-slate-500 mt-5">124 melodies found so far.</p>
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -102,20 +103,29 @@ const Home: NextPage = () => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Copy your current bio{" "}
+              How do you feel?{" "}
               <span className="text-slate-500">
-                (or write a few sentences about yourself)
+                (write a few sentences about how you feel)
               </span>
               .
             </p>
           </div>
           <textarea
             value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 100) {
+                // crop bio
+                setBio(e.target.value.slice(0, 100));
+              }
+              else{
+                setBio(e.target.value)
+              }
+            }}
             rows={4}
+            maxLength={100}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+              "e.g. Going through a tough breakup and need some comfort."
             }
           />
           <div className="flex mb-5 items-center space-x-3">
@@ -125,13 +135,21 @@ const Home: NextPage = () => {
           <div className="block">
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
-
+          <div className="grid place-items-center mt-5">
+          <Turnstile
+                sitekey={process.env.TURNSTILE_SITE_KEY ?? ""}
+                onVerify={(token) => {
+                  setToken( token);
+                }}
+            />
+          </div>
+          
           {!loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-5 mt-4 hover:bg-black/80 w-full"
               onClick={(e) => generateBio(e)}
             >
-              Generate your bio &rarr;
+              Find your melody &rarr;
             </button>
           )}
           {loading && (
@@ -157,20 +175,20 @@ const Home: NextPage = () => {
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
                   ref={bioRef}
                 >
-                  Your generated bios
+                  Your generated melodies
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
-                  .split("2.")
+                  .substring(generatedBios.indexOf("*") + 2)
+                  .split("*")
                   .map((generatedBio) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
                           navigator.clipboard.writeText(generatedBio);
-                          toast("Bio copied to clipboard", {
+                          toast("Melody copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
