@@ -114,6 +114,7 @@ const Home: NextPage = () => {
           </div>
           <textarea
             value={bio}
+            disabled={isDone}
             onChange={(e) => {
               if (e.target.value.length > 100) {
                 // crop bio
@@ -125,6 +126,7 @@ const Home: NextPage = () => {
             }}
             rows={4}
             maxLength={100}
+            
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
               "e.g. Going through a tough breakup and need some comfort."
