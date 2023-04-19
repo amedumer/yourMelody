@@ -1,3 +1,4 @@
+import { log } from "console";
 import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
@@ -53,6 +54,8 @@ const handler = async (req: Request): Promise<Response> => {
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
+
+  log("prompt: ", prompt);
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",

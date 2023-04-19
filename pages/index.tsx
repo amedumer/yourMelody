@@ -9,6 +9,7 @@ import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
 import Turnstile from "react-turnstile";
+import { log } from "console";
 
 
 const Home: NextPage = () => {
@@ -44,8 +45,6 @@ const Home: NextPage = () => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-
-    console.log("prompt: ", prompt);
 
     const response = await fetch("/api/generate", {
       method: "POST",
