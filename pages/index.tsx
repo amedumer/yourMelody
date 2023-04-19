@@ -45,6 +45,8 @@ const Home: NextPage = () => {
     setGeneratedBios("");
     setLoading(true);
 
+    console.log("prompt: ", prompt);
+
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
