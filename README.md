@@ -1,6 +1,6 @@
 # [melodi.space](https://www.melodi.space/)
 
-This project generates 3 song suggestions based on your mood for you using AI.
+yourMelody is an AI-driven music recommendation engine using NLP to understand users' moods & suggest 3 tailored songs for an immersive, personalized listening experience. Elevate your vibe with yourMelody!
 
 [![yourMelody](./public/og.png)](https://www.melodi.space/)
 
