@@ -1,8 +1,8 @@
-# [TwitterBio.com](https://www.twitterbio.com/)
+# [melodi.space](https://www.melodi.space/)
 
-This project generates Twitter bios for you using AI.
+yourMelody is an AI-driven music recommendation engine using NLP to understand users' moods & suggest 3 tailored songs for an immersive, personalized listening experience. Elevate your vibe with yourMelody!
 
-[![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.com)
+[![yourMelody](./public/og.png)](https://www.melodi.space/)
 
 ## How it works
 
