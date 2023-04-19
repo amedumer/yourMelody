@@ -1,8 +1,8 @@
-# [TwitterBio.com](https://www.twitterbio.com/)
+# [melodi.space](https://www.melodi.space/)
 
-This project generates Twitter bios for you using AI.
+This project generates 3 song suggestions based on your mood for you using AI.
 
-[![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.com)
+[![yourMelody](./public/og.png)](https://www.melodi.space/)
 
 ## How it works
 
